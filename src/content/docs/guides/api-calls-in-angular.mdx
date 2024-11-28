@@ -28,10 +28,10 @@ This creates the `FlightService` in the above mentioned folder. Before we can ma
   import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-providers: [
-provideRouter(routes),
-provideHttpClient(withFetch()), /* 👈🏽 add this */
-]
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withFetch()) /* 👈🏽 add this */,
+  ],
 };
 
 ````
@@ -56,16 +56,16 @@ We will create an `interface` for the data type we're going to use. I.e. for fli
   import { Airline } from "@ngneat/falso/src/lib/flight-number";
 
 export type IAirline = {
-id: string;
-name: Airline;
-}
+  id: string,
+  name: Airline,
+};
 
 export type IFlight = {
-id: string;
-details: FlightDetails & {
-image: string
-}
-}
+  id: string,
+  details: FlightDetails & {
+    image: string,
+  },
+};
 
 ````
 </TabItem>
@@ -90,7 +90,7 @@ export class FlightService {
     return this.http.get<{
       AIRLINES: IAirline[],
       FLIGHTS: IFlight[]
-    }>('https://raw.githubusercontent.com/DevSlam-2023-Angular/angular-zero-to-hero/main/public/data.json')
+    }>('https://raw.githubusercontent.com/ahsanayaz/angular-zero-to-hero/main/public/data.json')
   }
 }
 ````

@@ -12,11 +12,11 @@
 ## Developing Locally
 
 ```
-git clone https://github.com/DevSlam-2023-Angular/angular-zero-to-hero
+git clone https://github.com/ahsanayaz/angular-zero-to-hero
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/DevSlam-2023-Angular/angular-zero-to-hero)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/DevSlam-2023-Angular/angular-zero-to-hero)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/ahsanayaz/angular-zero-to-hero)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/ahsanayaz/angular-zero-to-hero)
 
 ## 🚀 Project Structure
 

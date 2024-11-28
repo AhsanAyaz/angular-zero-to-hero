@@ -5,13 +5,13 @@ const baseUrl = import.meta.env.BASE_URL;
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://github.com/DevSlam-2023-Angular",
+  site: "https://github.com/ahsanayaz",
   base: "/angular-zero-to-hero",
   integrations: [
     starlight({
       title: "Angular - Zero to Hero",
       social: {
-        github: "https://github.com/DevSlam-2023-Angular/angular-zero-to-hero",
+        github: "https://github.com/ahsanayaz/angular-zero-to-hero",
       },
       sidebar: [
         {
