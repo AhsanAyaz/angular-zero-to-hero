@@ -2,8 +2,9 @@
 title: Angular Signals
 description: Creating the flight card component
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
-import Highlight from '../../../directives/highlight.astro';
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+import Highlight from "../../../directives/highlight.astro";
 
 Signals are a new set of APIs from the Angular team (currently in developer preview) which comes with a lot of improvements when it comes to the reactive paradigm of managing state along with improved performance and change detection strategy.
 
@@ -11,13 +12,11 @@ Signals are a new set of APIs from the Angular team (currently in developer prev
 
 We will create a Flight Card component using the following command in the terminal:
 
-
 ```bash
 ng g c components/flight-card
 ```
 
 Once the files for the Flight Card component are created, update them as follows:
-
 
 <Tabs>
 	<TabItem label="flight-card.component.html">
@@ -65,29 +64,30 @@ Once the files for the Flight Card component are created, update them as follows
         </div>
       </div>
     </article>
-  ```
-  </TabItem>
-	<TabItem label="flight-card.component.ts">
-  ```ts
-  import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-  import { CommonModule } from '@angular/common';
-  import { IFlight } from 'src/app/types';
 
-  @Component({
-    selector: 'app-flight-card',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './flight-card.component.html',
-    styleUrls: ['./flight-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
-  })
-  export class FlightCardComponent {
-    @Input() flightItem!: IFlight;
-  }
-  ```
+````
+</TabItem>
+	<TabItem label="flight-card.component.ts">
+```ts
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IFlight } from 'src/app/types';
+
+@Component({
+  selector: 'app-flight-card',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './flight-card.component.html',
+  styleUrls: ['./flight-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FlightCardComponent {
+  @Input() flightItem!: IFlight;
+}
+````
+
   </TabItem>
 </Tabs>
-
 
 ## Create a signal for the list of flights in the Home page
 
@@ -128,6 +128,7 @@ To render the list of flights, we will use an Angular Signal. Let's update the `
     }
 
     ```
+
   </TabItem>
   <TabItem label="home.component.html">
   ```html
@@ -137,8 +138,8 @@ To render the list of flights, we will use an Angular Signal. Let's update the `
     </section>
   </div>
 
-  ```
-  </TabItem>
+````
+</TabItem>
 </Tabs>
 
 You should be able to see the flights data on the screen now. Yayy!
@@ -148,33 +149,34 @@ You should be able to see the flights data on the screen now. Yayy!
 Since we have the list of flights now, we can implement a client-side search for these flights. For this, we will create another signal. But this time, in the Flight Service.
 
 <Tabs>
-  <TabItem label="flight.service.ts">
-  ```ts
-  hlconfig 10-14
-  import { HttpClient } from '@angular/common/http';
-  import { Injectable, inject, signal } from '@angular/core';
-  import { IAirline, IFlight } from '../types';
+<TabItem label="flight.service.ts">
+```ts
+hlconfig 10-14
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { IAirline, IFlight } from '../types';
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class FlightService {
-    http = inject(HttpClient);
-    flightSearchTerm = signal(''); /* 👈🏽 add this */
+@Injectable({
+  providedIn: 'root'
+})
+export class FlightService {
+  http = inject(HttpClient);
+  flightSearchTerm = signal(''); /* 👈🏽 add this */
 
-    searchFlights(searchTerm: string) { /* 👈🏽 add this */
-      this.flightSearchTerm.set(searchTerm);
-    }
-
-    getData() {
-      return this.http.get<{
-        AIRLINES: IAirline[],
-        FLIGHTS: IFlight[]
-      }>('https://raw.githubusercontent.com/DevSlam-2023-Angular/angular-workshop-docs/main/public/data.json')
-    }
+  searchFlights(searchTerm: string) { /* 👈🏽 add this */
+    this.flightSearchTerm.set(searchTerm);
   }
 
-  ```
+  getData() {
+    return this.http.get<{
+      AIRLINES: IAirline[],
+      FLIGHTS: IFlight[]
+    }>('https://raw.githubusercontent.com/DevSlam-2023-Angular/angular-zero-to-hero/main/public/data.json')
+  }
+}
+
+````
+
   </TabItem>
 </Tabs>
 
@@ -197,38 +199,39 @@ Now that we have the signal created for the search term, let's update the header
       ...
     </header>
 
-  ```
-  </TabItem>
-  <TabItem label="header.component.ts">
-  ```ts
-  import { AfterViewInit, Component, ElementRef, ViewChild, inject } from '@angular/core';
-  import { CommonModule } from '@angular/common';
-  import { RouterModule } from '@angular/router';
-  import { debounceTime, fromEvent } from 'rxjs';
-  import { FlightService } from 'src/app/services/flight.service';
+````
+</TabItem>
+<TabItem label="header.component.ts">
+```ts
+import { AfterViewInit, Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { debounceTime, fromEvent } from 'rxjs';
+import { FlightService } from 'src/app/services/flight.service';
 
-  @Component({
-    selector: 'app-header',
-    standalone: true,
-    imports: [CommonModule, RouterModule],
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
-  })
-  export class HeaderComponent implements AfterViewInit {
-    @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
-    flightService = inject(FlightService);
-    ngAfterViewInit() {
-      fromEvent(this.searchInput.nativeElement, 'input')
-        .pipe(
-          debounceTime(300)
-        ).subscribe(() => {
-          const searchTerm = this.searchInput.nativeElement.value;
-          this.flightService.searchFlights(searchTerm);
-        })
-    }
+@Component({
+  selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
+})
+export class HeaderComponent implements AfterViewInit {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  flightService = inject(FlightService);
+  ngAfterViewInit() {
+    fromEvent(this.searchInput.nativeElement, 'input')
+      .pipe(
+        debounceTime(300)
+      ).subscribe(() => {
+        const searchTerm = this.searchInput.nativeElement.value;
+        this.flightService.searchFlights(searchTerm);
+      })
   }
+}
 
-  ```
+````
+
   </TabItem>
 </Tabs>
 
@@ -244,28 +247,28 @@ Finally, let's create an `computed` property to monitor the `flightSearchTerm` s
   import { IFlight } from '../types';
   import { FlightCardComponent } from '../components/flight-card/flight-card.component';
 
-  @Component({
-    selector: 'app-home',
-    standalone: true,
-    imports: [CommonModule, FlightCardComponent],
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
-  })
-  export class HomeComponent implements OnInit {
-    flightService = inject(FlightService);
-    flights = signal<IFlight[]>([]);
-    filteredFlights: Signal<IFlight[]> = computed(() => { /* 👈🏽 add this */
-      const searchTerm = this.flightService.flightSearchTerm().toLowerCase();
-      if (!searchTerm) {
-        return this.flights();
-      } else {
-        const searchedFlights = this.flights().filter(flight => {
-          return this.isMatchingFlight(searchTerm, flight);
-        });
-        return searchedFlights;
-      }
-    });
-    
+@Component({
+selector: 'app-home',
+standalone: true,
+imports: [CommonModule, FlightCardComponent],
+templateUrl: './home.component.html',
+styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+flightService = inject(FlightService);
+flights = signal<IFlight[]>([]);
+filteredFlights: Signal<IFlight[]> = computed(() => { /_ 👈🏽 add this _/
+const searchTerm = this.flightService.flightSearchTerm().toLowerCase();
+if (!searchTerm) {
+return this.flights();
+} else {
+const searchedFlights = this.flights().filter(flight => {
+return this.isMatchingFlight(searchTerm, flight);
+});
+return searchedFlights;
+}
+});
+
     isMatchingFlight(searchTerm: string, flight: IFlight) { /* 👈🏽 add this */
       return flight.details.airline.toLowerCase().includes(searchTerm) ||
         flight.details.origin.name.includes(searchTerm) ||
@@ -290,19 +293,21 @@ Finally, let's create an `computed` property to monitor the `flightSearchTerm` s
           }
         });
     }
-  }
 
-  ```
-  </TabItem>
-  <TabItem label="home.component.html">
-  ```html
-  hlconfig 3
-  <div class="container">
-    <section class="flex flex-col gap-8">
-      <app-flight-card *ngFor="let flight of filteredFlights()" [flightItem]="flight"></app-flight-card>
-    </section>
-  </div>
-  ```
+}
+
+````
+</TabItem>
+<TabItem label="home.component.html">
+```html
+hlconfig 3
+<div class="container">
+  <section class="flex flex-col gap-8">
+    <app-flight-card *ngFor="let flight of filteredFlights()" [flightItem]="flight"></app-flight-card>
+  </section>
+</div>
+````
+
   </TabItem>
 </Tabs>
 

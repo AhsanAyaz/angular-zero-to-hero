@@ -5,13 +5,13 @@ const baseUrl = import.meta.env.BASE_URL;
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://github.com/DevSlam-2023-Angular',
-  base: '/angular-workshop-docs',
+  site: "https://github.com/DevSlam-2023-Angular",
+  base: "/angular-zero-to-hero",
   integrations: [
     starlight({
       title: "Angular - Zero to Hero",
       social: {
-        github: "https://github.com/DevSlam-2023-Angular/angular-workshop-docs",
+        github: "https://github.com/DevSlam-2023-Angular/angular-zero-to-hero",
       },
       sidebar: [
         {
@@ -19,7 +19,10 @@ export default defineConfig({
           items: [
             // Each item here is one entry in the navigation menu.
             { label: "Angular CLI", link: `${baseUrl}guides/angular-cli/` },
-            { label: "Set up Tailwind CSS", link: `${baseUrl}guides/tailwind-css/` },
+            {
+              label: "Set up Tailwind CSS",
+              link: `${baseUrl}guides/tailwind-css/`,
+            },
             { label: "Angular Routing", link: `${baseUrl}guides/routing/` },
             {
               label: "API calls in Angular",
@@ -40,6 +43,6 @@ export default defineConfig({
           autogenerate: { directory: "reference" },
         },
       ],
-    })
+    }),
   ],
 });

@@ -2,7 +2,8 @@
 title: API Calls in Angular
 description: Using the HTTPClient to make API calls in Angular
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 ## Creating our first Angular Service
 
@@ -26,14 +27,15 @@ This creates the `FlightService` in the above mentioned folder. Before we can ma
   import { provideHttpClient, withFetch } from '@angular/common/http';  /* 👈🏽 add this */
   import { routes } from './app.routes';
 
-  export const appConfig: ApplicationConfig = {
-    providers: [
-      provideRouter(routes),
-      provideHttpClient(withFetch()), /* 👈🏽 add this */
-    ]
-  };
-  ```
-  </TabItem>
+export const appConfig: ApplicationConfig = {
+providers: [
+provideRouter(routes),
+provideHttpClient(withFetch()), /* 👈🏽 add this */
+]
+};
+
+````
+</TabItem>
 </Tabs>
 
 ## Using the FlightService to make HTTP calls
@@ -43,7 +45,7 @@ Install the package as follows:
 
 ```bash
 npm install --save @ngneat/falso
-```
+````
 
 We will create an `interface` for the data type we're going to use. I.e. for flights. Let's create a new file inside our `src/app` folder and name it `types-and-interfaces.ts`. Then add the following code to it:
 
@@ -53,48 +55,48 @@ We will create an `interface` for the data type we're going to use. I.e. for fli
   import { FlightDetails } from "@ngneat/falso";
   import { Airline } from "@ngneat/falso/src/lib/flight-number";
 
-  export type IAirline = {
-    id: string;
-    name: Airline;
-  }
+export type IAirline = {
+id: string;
+name: Airline;
+}
 
-  export type IFlight = {
-    id: string;
-    details: FlightDetails & {
-      image: string
-    }
-  }
+export type IFlight = {
+id: string;
+details: FlightDetails & {
+image: string
+}
+}
 
-  ```
-  </TabItem>
+````
+</TabItem>
 </Tabs>
 
 Now that we have the types, let's update the content of our Flight service so we can make the API call and use these types.
 
 <Tabs>
-  <TabItem label="src/app/services/flight.service.ts">
-  ```ts
-  import { HttpClient } from '@angular/common/http'; /* 👈🏽 add this */
-  import { Injectable, inject /* 👈🏽 add this */ } from '@angular/core';
-  import { IAirline, IFlight } from '../types'; /* 👈🏽 add this */
+<TabItem label="src/app/services/flight.service.ts">
+```ts
+import { HttpClient } from '@angular/common/http'; /* 👈🏽 add this */
+import { Injectable, inject /* 👈🏽 add this */ } from '@angular/core';
+import { IAirline, IFlight } from '../types'; /* 👈🏽 add this */
 
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class FlightService {
-    http = inject(HttpClient); /* 👈🏽 add this */
-  
-    getData() {  /* 👈🏽 add this */
-      return this.http.get<{
-        AIRLINES: IAirline[],
-        FLIGHTS: IFlight[]
-      }>('https://raw.githubusercontent.com/DevSlam-2023-Angular/angular-workshop-docs/main/public/data.json')
-    }
+@Injectable({
+  providedIn: 'root'
+})
+export class FlightService {
+  http = inject(HttpClient); /* 👈🏽 add this */
+
+  getData() {  /* 👈🏽 add this */
+    return this.http.get<{
+      AIRLINES: IAirline[],
+      FLIGHTS: IFlight[]
+    }>('https://raw.githubusercontent.com/DevSlam-2023-Angular/angular-zero-to-hero/main/public/data.json')
   }
-  ```
+}
+````
+
   </TabItem>
 </Tabs>
-
 
 Now that we have the function to make our HTTP call implemented, let's use it in the Home component when the page/component loads.
 Update the `home.component.ts` file as follows:
@@ -106,15 +108,15 @@ Update the `home.component.ts` file as follows:
   import { CommonModule } from '@angular/common';
   import { FlightService } from '../services/flight.service'; /* 👈🏽 add this */
 
-  @Component({
-    selector: 'app-home',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
-  })
-  export class HomeComponent implements OnInit {
-    flightService = inject(FlightService); /* 👈🏽 add this */
+@Component({
+selector: 'app-home',
+standalone: true,
+imports: [CommonModule],
+templateUrl: './home.component.html',
+styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+flightService = inject(FlightService); /_ 👈🏽 add this _/
 
     ngOnInit(): void { /* 👈🏽 add this */
       this.flightService.getData()
@@ -127,10 +129,12 @@ Update the `home.component.ts` file as follows:
           }
         });
     }
-  }
 
-  ```
-  </TabItem>
+}
+
+```
+</TabItem>
 </Tabs>
 
 Once you've implemented this, go to the home page, open the devtools to see the data in the console.
+```
